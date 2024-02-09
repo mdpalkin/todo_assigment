@@ -6,7 +6,11 @@ import {queryClient} from "./main.tsx";
 
 function App() {
 
-    const {data, isLoading, isError} = useQuery({ queryKey: ['todos'], queryFn: todolistAPI.getTodolists })
+    const {data, isLoading, isError} = useQuery({
+        queryKey: ['todos'],
+        queryFn: todolistAPI.getTodolists,
+
+    }, )
 
     const addTaskMutation = useMutation({
         mutationFn: todolistAPI.addTask,
