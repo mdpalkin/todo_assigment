@@ -42,6 +42,7 @@ export const AddItemForm = memo(({disabled = false, callback}: Props) => {
                     value={text}
                     onKeyDown={onKeyPressHandler}
                     className={error ? s.error : ''}
+                    variant={'standard'}
                 />
                 <IconButton disabled={disabled} onClick={callBackHandler}><AddCircleOutlineIcon /></IconButton>
             </div>

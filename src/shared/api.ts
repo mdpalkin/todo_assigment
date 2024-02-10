@@ -6,7 +6,7 @@ const instance = axios.create({
 })
 export const todolistAPI = {
     getBoards() {
-        return instance.get<BoardType[]>('/tasks')
+        return instance.get<TaskType[]>('/tasks')
     },
     addTask(todo: TaskType) {
         return instance.post<TaskType>('/tasks', todo)
@@ -14,25 +14,22 @@ export const todolistAPI = {
     deleteTask(taskId: string) {
         return instance.delete(`/tasks/${taskId}`)
     },
-    updateBoard(update: BoardType[]) {
-        return instance.put(`/tasks`, update)
+    updateTask(update: {id: string, changes: Partial<TaskType>}) {
+        return instance.put(`/tasks/${update.id}`, {...update.changes})
     }
 }
 
 export type TaskType = {
-    todolistId: string,
     id: string,
-    title: string
-    completed: boolean
-}
-
-type ItemType = {
-    id: number,
-    title: string
-}
-
-type BoardType = {
-    id: number
     title: string,
-    items: ItemType[]
+    column: Columns
+    order: string
 }
+
+export type BoardType = {
+    id: string
+    title: Columns,
+    items: TaskType[]
+}
+
+export type Columns = "todo" | "inProgress" | "done"

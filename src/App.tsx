@@ -1,183 +1,99 @@
 import './App.scss'
-import {TaskType, todolistAPI} from "./shared/api.ts";
-import {DragEvent, useState} from "react";
-import {Paper, Typography} from "@mui/material";
-import {useQuery} from "@tanstack/react-query";
-import {Task} from "./entities/Task/ui/Task.tsx";
+import {BoardType, Columns, TaskType, todolistAPI} from "./shared/api.ts";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {queryClient} from "./main.tsx";
+import {Loader} from "./components/Loader/Loader.tsx";
+import {Column} from "./entities/Todolist/ui/Column.tsx";
+import {useState} from "react";
 
 
 function App() {
 
-    const {data, isLoading, isError} = useQuery({
+    const {data, isFetching, isLoading, isError} = useQuery({
         queryKey: ['todos'],
         queryFn: todolistAPI.getBoards,
 
     } )
 
+    const addTaskMutation = useMutation({
+        mutationFn: todolistAPI.addTask,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+    const addTask = (task: TaskType) => {
+        addTaskMutation.mutate(task)
+    }
 
-    const [boards, setBoards] = useState<BoardType[]>([])
+
+
+    const deleteTaskMutation = useMutation({
+        mutationFn: todolistAPI.deleteTask,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const deleteTask = (taskId: string) => {
+        deleteTaskMutation.mutate(taskId)
+    }
+
+
+    const updateTaskMutation = useMutation({
+        mutationFn: todolistAPI.updateTask,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const updateTask = (id: string, changes: Partial<TaskType>) => {
+        updateTaskMutation.mutate({id, changes})
+    }
+
 
     const [currentBoard, setCurrentBoard] = useState<null | BoardType>(null)
-    const [currentItem, setCurrentItem] = useState<null | ItemType>(null)
+    const [currentItem, setCurrentItem] = useState<null | TaskType>(null)
 
 
-    //
-    // const addTaskMutation = useMutation({
-    //     mutationFn: todolistAPI.addTask,
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['todos'] })
-    //     },
-    // })
-    //
-    // const addTask = (task: TaskType) => {
-    //     addTaskMutation.mutate(task)
-    // }
-    //
-    // const deleteTaskMutation = useMutation({
-    //     mutationFn: todolistAPI.deleteTask,
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['todos'] })
-    //     },
-    // })
-    //
-    // const updateBoardMutation = useMutation({
-    //     mutationFn: todolistAPI.updateBoard,
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['todos'] })
-    //     },
-    // })
-    //
-    // const updateTask = (taskId: string, changes: Partial<TaskType>) => {
-    //     updateTaskMutation.mutate({taskId, changes})
-    // }
-    //
-    // const deleteTask = (taskId: string) => {
-    //     deleteTaskMutation.mutate(taskId)
-    // }
-    //
-    //
     if (isLoading) {
-        return <div>Loading...</div>
+        return <Loader />
     }
 
     if (isError) {
         return <div>Some error occurred :(</div>
     }
 
+    const rawBoards: BoardType[] = [
+        {id: '1', title: 'todo', items: []},
+        {id: '2', title: 'inProgress', items: []},
+        {id: '3', title: 'done', items: []},
+    ]
 
-    //
-    // const todolists: TodolistType = {
-    //     ['1']: [],
-    //     ['2']: [],
-    //     ['3']: [],
-    // }
-    // console.log(data)
-    //
-    // data!.data.forEach((task) => {
-    //     return  todolists[task.todolistId] = [...todolists[task.todolistId], task]
-    // })
-
-    // TEMPORARY SOLUTION
-
-    const dragOverHandler = (e: DragEvent<HTMLSpanElement>) => {
-        e.preventDefault()
-        // if (e.target.className === 'item') {
-        //     e.target.boxShadow = '0 2px 3px gray'
-        // }
-    }
-
-
-    // const dragLeaveHandler = (e:  DragEvent<HTMLSpanElement>) => {
-            // e.target.boxShadow = 'none'
-    // }
-
-    const dragStartHandler = (board: BoardType, item: ItemType) => {
-        setCurrentBoard(board)
-        setCurrentItem(item)
-    }
-
-    // const dragEndHandler = (e:  DragEvent<HTMLSpanElement>) => {
-    //     // e.target.boxShadow = 'none'
-    // }
-
-    const dropHandler = (e: DragEvent<HTMLSpanElement>, board: BoardType, item: ItemType ) => {
-        e.stopPropagation()
-        e.preventDefault()
-        const currentIndex = currentBoard!.items.indexOf(currentItem!)
-        currentBoard!.items.splice(currentIndex, 1)
-        const dropIndex = board.items.indexOf(item)
-        board.items.splice(dropIndex + 1, 0, currentItem!)
-        setBoards(boards.map(b => {
-            if (b.id === board.id) return board
-            if (b.id === currentBoard?.id) return  currentBoard
-            return b
-        }))
-    }
-
-    const dropCardHandler = (e: DragEvent<HTMLDivElement>, board: BoardType) => {
-        e.stopPropagation()
-        board.items.push(currentItem!)
-        const currentIndex = currentBoard!.items.indexOf(currentItem!)
-        currentBoard!.items.splice(currentIndex, 1)
-        setBoards(boards.map(b => {
-            if (b.id === board.id) return board
-            if (b.id === currentBoard?.id) return  currentBoard
-            return b
-        }))
-    }
-
-
-
+    data.data.forEach(task => {
+        if (task.column === 'todo') rawBoards[0].items.push(task)
+        if (task.column === 'inProgress') rawBoards[1].items.push(task)
+        if (task.column === 'done') rawBoards[2].items.push(task)
+    })
 
 
     return (
 
         <div className={'drag'}>
-            {data!.data.map(board => <Paper
-                elevation={6}
-                key={board.id}
-                className={'column'}
-                onDragOver={e => dragOverHandler(e)  }
-                onDrop={e => dropCardHandler(e, board)}
-            >
-                <Typography variant={'h4'}>{board.title}</Typography>
-                {board.items.map(item => <Task
-                        key={item.id}
-                        className={'item'}
-                        draggable
-                        // onDragLeave={e => dragLeaveHandler(e)}
-                        onDragStart={() => dragStartHandler(board, item)}
-                        // onDragEnd={e => dragEndHandler(e)}
-                        onDrop={e => dropHandler(e, board, item)}
-                        onDragOver={(e) => dragOverHandler(e)}
-                        task={item}
-                    >{item.title}
-                    </Task>
-                )}
-            </Paper>)}
+            {isFetching && <Loader/>}
+            {rawBoards.map(board =>
+                <Column board={board}
+                        deleteTask={deleteTask}
+                        updateTask={updateTask}
+                        addTask={addTask}
+                        key={board.id}
+                        currentBoard={currentBoard}
+                        currentItem={currentItem}
+                        setCurrentBoard={setCurrentBoard}
+                        setCurrentItem={setCurrentItem}
+                />)}
         </div>
-      // <div className={'App'}>{
-      //     Object.keys(todolists).map(id => <Todolist
-      //         todolistId={id}
-      //         tasks={todolists[id]}
-      //         addTask={addTask}
-      //         deleteTask={deleteTask}
-      //         updateTask={updateTask}
-      //     />)
-      // }</div>
   )
 }
 
-export type TodolistType = {[key: string]: TaskType[]}
 export default App
 
-export type ItemType = {
-    id: number,
-    title: string
-}
-
-export type BoardType = {
-    id: number
-    title: string,
-    items: ItemType[]
-}
