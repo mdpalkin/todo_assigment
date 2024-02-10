@@ -38,10 +38,9 @@ export const Column = ({
         onDragOver={e => dragOverHandler(e)}
         onDrop={e => dropCardHandler(e, board)}
     >
-        <Typography variant={'h4'}>{board.title}</Typography>
+        <Typography variant={'h2'} style={{fontSize: '23px'}}>{board.title}</Typography>
         {board.items.map(item => <Task
                 key={item.id}
-                className={'item'}
                 draggable={!disabled}
                 onDragStart={() => dragStartHandler(board, item)}
                 onDrop={e => dropHandler(e, board, item)}

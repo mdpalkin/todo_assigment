@@ -1,31 +1,6 @@
-.App {
-  display: flex;
-  //justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 30px;
-  padding: 30px;
-}
-
 .drag {
   display: flex;
-  margin: 150px;
+  margin-top: 150px;
   justify-content: center;
   gap: 50px;
-}
-
-.column {
-  width: 300px;
-  min-height: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  gap: 10px;
-}
-
-.item {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid black;
-  border-radius: 10px;
 }
