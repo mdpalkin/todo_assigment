@@ -1,5 +1,5 @@
 import {IconButton, Paper} from "@mui/material";
-import {EditableSpan} from "../../../components/EditableSpan/EditableSpan.tsx";
+import {EditableSpan} from "../../../features/EditableSpan/EditableSpan.tsx";
 import s from './Task.module.scss'
 import DeleteIcon from "@mui/icons-material/Delete";
 import {ComponentPropsWithoutRef} from "react";
