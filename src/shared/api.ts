@@ -5,8 +5,8 @@ const instance = axios.create({
     baseURL: 'https://65c619e8e5b94dfca2e0f369.mockapi.io/todolistsapi'
 })
 export const todolistAPI = {
-    getTodolists() {
-        return instance.get<TaskType[]>('/tasks')
+    getBoards() {
+        return instance.get<BoardType[]>('/tasks')
     },
     addTask(todo: TaskType) {
         return instance.post<TaskType>('/tasks', todo)
@@ -14,8 +14,8 @@ export const todolistAPI = {
     deleteTask(taskId: string) {
         return instance.delete(`/tasks/${taskId}`)
     },
-    updateTask(update: {taskId: string, changes: Partial<TaskType>}) {
-        return instance.put(`/tasks/${update.taskId}`, update.changes)
+    updateBoard(update: BoardType[]) {
+        return instance.put(`/tasks`, update)
     }
 }
 
@@ -24,4 +24,15 @@ export type TaskType = {
     id: string,
     title: string
     completed: boolean
+}
+
+type ItemType = {
+    id: number,
+    title: string
+}
+
+type BoardType = {
+    id: number
+    title: string,
+    items: ItemType[]
 }
