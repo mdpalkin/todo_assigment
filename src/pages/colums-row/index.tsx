@@ -1,16 +1,14 @@
-import './App.scss'
-import {BoardType, tasksAPI, TaskType} from "../shared/api.ts";
+import {useGetTasksQuery} from "../../entities/Column/model/useTasksQuery.ts";
 import {useMutation} from "@tanstack/react-query";
-import {queryClient} from "./main.tsx";
-import {Loader} from "../widgets/Loader/Loader.tsx";
-import {Column} from "../entities/Column/ui/Column.tsx";
+import {BoardType, tasksAPI, TaskType} from "../../shared/api";
 import {useState} from "react";
-import {useGetTodosQuery} from "./model/useTodosQuery.ts";
+import {Loader} from "../../widgets/Loader/Loader.tsx";
+import {Column} from "../../entities/Column/ui/Column.tsx";
+import s from './styles.module.scss'
+import {queryClient} from "../../app/providers/query-client.tsx";
 
-
-function App() {
-
-    const {data, isFetching, isError} = useGetTodosQuery()
+export const ColumnsRow = () => {
+    const {data, isFetching, isError} = useGetTasksQuery()
 
     const addTaskMutation = useMutation({
         mutationFn: tasksAPI.addTask,
@@ -43,8 +41,8 @@ function App() {
         },
     })
 
-    const updateTask = (id: string, changes: Partial<TaskType>) => {
-        updateTaskMutation.mutate({id, changes})
+    const updateTask = (model: Partial<TaskType>) => {
+        updateTaskMutation.mutate(model)
     }
 
 
@@ -56,7 +54,7 @@ function App() {
     }
 
     return (
-        <div className={'drag'}>
+        <div className={s.wrapper}>
             {isFetching && <Loader/>}
             {data && data.map(board =>
                 <Column board={board}
@@ -71,8 +69,5 @@ function App() {
                         setCurrentTask={setCurrentTask}
                 />)}
         </div>
-  )
+    )
 }
-
-export default App
-

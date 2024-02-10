@@ -1,10 +1,10 @@
 import {Paper, Typography} from "@mui/material";
-import {Task} from "../../Task/ui/Task.tsx";
-import {BoardType, TaskType} from "../../../shared/api.ts";
-import {AddItemForm} from "../../../features/AddItemForm/AddItemForm.tsx";
+import {Task} from "../../Task/ui";
 import s from './Column.module.scss'
 import {v1} from "uuid";
 import {useDragEndDrop} from "../model/useDragEndDrop.ts";
+import {BoardType, TaskType} from "shared/api/models.ts";
+import {AddItemForm} from "../../../features/AddItemForm/ui.tsx";
 
 export const Column = ({
                            board,
@@ -60,7 +60,7 @@ export const Column = ({
 type Props = {
     board: BoardType
     deleteTask: (taskId: string) => void
-    updateTask: (taskId: string, changes: Partial<TaskType>) => void
+    updateTask: (model: Partial<TaskType>) => void
     addTask: (task: TaskType) => void
     currentColumn: BoardType | null
     currentTask: TaskType | null

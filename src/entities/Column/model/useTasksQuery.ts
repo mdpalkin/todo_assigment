@@ -1,7 +1,8 @@
 import {useQuery} from "@tanstack/react-query";
-import {BoardType, tasksAPI, TaskType} from "../../shared/api.ts";
+import {tasksAPI} from "../../../shared/api";
+import {BoardType, TaskType} from "../../../shared/api";
 
-export const useGetTodosQuery = () => useQuery({
+export const useGetTasksQuery = () => useQuery({
     queryKey: ['todos'],
     queryFn: tasksAPI.getTasks,
     select: data => {

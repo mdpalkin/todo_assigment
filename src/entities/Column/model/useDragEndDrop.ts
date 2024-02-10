@@ -1,5 +1,5 @@
 import {DragEvent} from "react";
-import {BoardType, TaskType} from "../../../shared/api.ts";
+import {BoardType, TaskType} from "shared/api/models.ts";
 
 export const useDragEndDrop = ({updateTask, setCurrentTask, currentTask, setCurrentColumn, currentColumn} : Props) => {
     const dragOverHandler = (e: DragEvent<HTMLSpanElement>) => {
@@ -19,10 +19,10 @@ export const useDragEndDrop = ({updateTask, setCurrentTask, currentTask, setCurr
         const dropIndex = board.items.indexOf(item)
         board.items.splice(dropIndex + 1, 0, currentTask!)
         if (board.type !== currentTask?.column) {
-            updateTask(currentTask!.id, {column: board.type, order: board.items.length})
+            updateTask( {id: currentTask!.id, column: board.type, order: board.items.length})
         } else {
-            updateTask(currentTask!.id, {order: (dropIndex + 1)})
-            updateTask(item.id, {order: (currentIndex)})
+            updateTask({id: currentTask!.id,  order: (dropIndex + 1)})
+            updateTask( {id: item.id,order: (currentIndex)})
         }
     }
 
@@ -31,7 +31,7 @@ export const useDragEndDrop = ({updateTask, setCurrentTask, currentTask, setCurr
         board.items.push(currentTask!)
         const currentIndex = currentColumn!.items.indexOf(currentTask!)
         currentColumn!.items.splice(currentIndex, 1)
-        updateTask(currentTask!.id, {column: board.type})
+        updateTask( {id: currentTask!.id, column: board.type})
     }
 
     return {
@@ -47,5 +47,5 @@ type Props = {
     currentColumn: BoardType | null
     setCurrentTask: (item: TaskType) => void
     setCurrentColumn: (board: BoardType) => void
-    updateTask: (taskId: string, task: Partial<TaskType>) => void
+    updateTask: (model: Partial<TaskType>) => void
 }
