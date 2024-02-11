@@ -1,6 +1,7 @@
 import {memo} from "react";
 import {TextField, Typography} from "@mui/material";
 import {useEditableSpan} from "./model";
+import s from './styles.module.scss'
 
 export const EditableSpan = memo(({disabled, title, onChange}: Props) => {
 
@@ -8,12 +9,12 @@ export const EditableSpan = memo(({disabled, title, onChange}: Props) => {
     const {text, editMode, textHandler, activateViewMode, onBlurHandler} = useEditableSpan({title, onChange})
 
     return (
-        <>
+        <div>
             {editMode && !disabled
                 ? <TextField value={text} variant={'standard'} size={'small'} autoFocus onChange={textHandler} onBlur={onBlurHandler}/>
-                : <Typography style={{display: 'flex', alignItems: 'center'}} onDoubleClick={activateViewMode}>{title}</Typography>
+                : <Typography className={s.wrapper} style={{display: 'flex', alignItems: 'center'}} onDoubleClick={activateViewMode}>{title}</Typography>
             }
-        </>
+        </div>
     )
 })
 

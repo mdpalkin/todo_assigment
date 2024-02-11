@@ -3,10 +3,10 @@ import s from './styles.module.scss'
 import {v1} from "uuid";
 import {ColumnType, TaskType} from "shared/api/models.ts";
 import {AddItemForm} from "../../../features/AddItemForm";
-import {useDragEndDrop} from "../model/useDragEndDrop.ts";
+import {useTasksDnD} from "../model/useTasksDnD.ts";
 import {Task, useTasksQuery} from "../../task";
 
-export const Column = ({board, disabled, currentColumn, setCurrentColumn, setCurrentTask, currentTask}: Props) => {
+export const Column = ({column, disabled, currentColumn, setCurrentColumn, setCurrentTask, currentTask}: Props) => {
 
     const {updateTask, addTask} = useTasksQuery()
 
@@ -15,27 +15,27 @@ export const Column = ({board, disabled, currentColumn, setCurrentColumn, setCur
         dragStartHandler,
         dropHandler,
         dropCardHandler
-    } = useDragEndDrop({updateTask, setCurrentColumn, currentColumn, setCurrentTask, currentTask})
+    } = useTasksDnD({updateTask, setCurrentColumn, currentColumn, setCurrentTask, currentTask})
 
 
     const addTaskHandler = (title: string) => {
-        const newTask = {id: v1(), title, column: board.type, order: board.items.length}
+        const newTask = {id: v1(), title, column: column.type, order: column.items.length}
         addTask(newTask)
     }
 
     return <Paper
         elevation={6}
-        key={board.id}
+        key={column.id}
         className={s.column}
         onDragOver={e => dragOverHandler(e)}
-        onDrop={e => dropCardHandler(e, board)}
+        onDrop={e => dropCardHandler(e, column)}
     >
-        <Typography variant={'h2'} style={{fontSize: '23px'}}>{board.title}</Typography>
-        {board.items.map(item => <Task
+        <Typography variant={'h2'} style={{fontSize: '23px'}}>{column.title}</Typography>
+        {column.items.map(item => <Task
                 key={item.id}
                 draggable={!disabled}
-                onDragStart={() => dragStartHandler(board, item)}
-                onDrop={e => dropHandler(e, board, item)}
+                onDragStart={() => dragStartHandler(column, item)}
+                onDrop={e => dropHandler(e, column, item)}
                 onDragOver={(e) => dragOverHandler(e)}
                 task={item}
             >{item.title}
@@ -48,7 +48,7 @@ export const Column = ({board, disabled, currentColumn, setCurrentColumn, setCur
 }
 
 type Props = {
-    board: ColumnType
+    column: ColumnType
     currentColumn: ColumnType | null
     currentTask: TaskType | null
     setCurrentColumn: (board: ColumnType) => void

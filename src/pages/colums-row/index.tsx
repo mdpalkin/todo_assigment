@@ -1,9 +1,9 @@
 import {useTasksQuery} from "../../entities/task";
-import {Loader} from "../../widgets/Loader/Loader.tsx";
-import {Column} from "../../entities/column/ui";
-import s from './styles.module.scss'
 import {useState} from "react";
 import {ColumnType, TaskType} from "../../shared/api";
+import s from './styles.module.scss'
+import {Loader} from "../../widgets/Loader/Loader.tsx";
+import {Column} from "../../entities/column/ui";
 
 export const ColumnsRow = () => {
 
@@ -19,10 +19,10 @@ export const ColumnsRow = () => {
     return (
         <div className={s.wrapper}>
             {isFetching && <Loader/>}
-            {data && data.map(board =>
-                <Column board={board}
+            {data && data.map(column =>
+                <Column column={column}
                         disabled={isFetching}
-                        key={board.id}
+                        key={column.id}
                         currentColumn={currentColumn}
                         currentTask={currentTask}
                         setCurrentColumn={setCurrentColumn}

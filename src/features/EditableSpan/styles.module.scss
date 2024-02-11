@@ -1,0 +1,10 @@
+.wrapper {
+
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+}

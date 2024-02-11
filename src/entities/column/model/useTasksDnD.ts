@@ -1,7 +1,7 @@
 import {DragEvent} from "react";
 import {ColumnType, TaskType} from "shared/api/models.ts";
 
-export const useDragEndDrop = ({updateTask, setCurrentTask, currentTask, setCurrentColumn, currentColumn} : Props) => {
+export const useTasksDnD = ({updateTask, setCurrentTask, currentTask, setCurrentColumn, currentColumn} : Props) => {
 
     const dragOverHandler = (e: DragEvent<HTMLSpanElement>) => {
         e.preventDefault()

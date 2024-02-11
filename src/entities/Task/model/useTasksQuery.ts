@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {DEFAULT_TODO_STATE, tasksAPI, TaskType} from "../../../shared/api";
+import {ColumnType, tasksAPI, TaskType} from "../../../shared/api";
 import {queryClient} from "../../../app/providers/query-client.tsx";
 
 export const useTasksQuery = () => {
@@ -9,7 +9,11 @@ export const useTasksQuery = () => {
         queryFn: tasksAPI.getTasks,
         select: (data) => {
 
-            const columns = DEFAULT_TODO_STATE
+            const columns: ColumnType[] = [
+                { id: '1', title: 'Todo', type: 'todo', items: [] },
+                { id: '2', title: 'In Progress', type: 'inProgress', items: [] },
+                { id: '3', title: 'Done', type: 'done', items: [] },
+            ];
 
             data.data.forEach((task) => {
                 const columnIndex = columns.findIndex((column) => column.type === task.column);
