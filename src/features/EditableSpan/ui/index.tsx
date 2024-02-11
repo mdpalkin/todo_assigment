@@ -1,7 +1,7 @@
 import {memo} from "react";
 import {TextField, Typography} from "@mui/material";
-import {useEditableSpan} from "./model";
 import s from './styles.module.scss'
+import {useEditableSpan} from "../model/index.js";
 
 export const EditableSpan = memo(({disabled, title, onChange}: Props) => {
 

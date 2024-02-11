@@ -2,9 +2,9 @@ import {Paper, Typography} from "@mui/material";
 import s from './styles.module.scss'
 import {v1} from "uuid";
 import {ColumnType, TaskType} from "shared/api/models.ts";
-import {AddItemForm} from "../../../features/AddItemForm";
+import {AddItemForm} from "../../../features/AddItemForm/index.js";
 import {useTasksDnD} from "../model/useTasksDnD.ts";
-import {Task, useTasksQuery} from "../../task";
+import {Task, useTasksQuery} from "../../task/index.js";
 
 export const Column = ({column, disabled, currentColumn, setCurrentColumn, setCurrentTask, currentTask}: Props) => {
 
