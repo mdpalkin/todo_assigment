@@ -16,11 +16,6 @@ pnpm install
 ```
 
 ## Запуск проекта 
-
-```
-pnpm run dev
-```
-
 ```
 vite
 ```
