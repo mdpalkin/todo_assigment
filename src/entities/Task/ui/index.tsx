@@ -1,11 +1,14 @@
 import {IconButton, Paper} from "@mui/material";
-import {EditableSpan} from "../../../features/EditableSpan/ui.tsx";
+import {EditableSpan} from "../../../features/EditableSpan";
 import s from './styles.module.scss'
 import DeleteIcon from "@mui/icons-material/Delete";
 import {ComponentPropsWithoutRef} from "react";
-import {TaskType} from "../../../shared/api/models.ts";
+import {TaskType} from "../../../shared/api";
+import {useTasksQuery} from "../model";
 
-export const Task = ({task, deleteTask, updateTask, ...rest}: Props) => {
+export const Task = ({task, ...rest}: Props) => {
+
+    const {deleteTask, updateTask} = useTasksQuery()
 
     const deleteTaskHandler = () => {
         deleteTask(task.id)
@@ -26,6 +29,4 @@ export const Task = ({task, deleteTask, updateTask, ...rest}: Props) => {
 
 type Props = {
     task: TaskType
-    deleteTask: (id: string) => void
-    updateTask: (model: Partial<TaskType>) => void
 } & ComponentPropsWithoutRef<'span'>

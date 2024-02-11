@@ -5,7 +5,7 @@ export type TaskType = {
     order: number
 }
 
-export type BoardType = {
+export type ColumnType = {
     id: string
     type: ColumnsType
     title: string

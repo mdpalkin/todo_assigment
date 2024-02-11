@@ -1,52 +1,15 @@
-import {useGetTasksQuery} from "../../entities/Column/model/useTasksQuery.ts";
-import {useMutation} from "@tanstack/react-query";
-import {BoardType, tasksAPI, TaskType} from "../../shared/api";
-import {useState} from "react";
+import {useTasksQuery} from "../../entities/task";
 import {Loader} from "../../widgets/Loader/Loader.tsx";
-import {Column} from "../../entities/Column/ui/Column.tsx";
+import {Column} from "../../entities/column/ui";
 import s from './styles.module.scss'
-import {queryClient} from "../../app/providers/query-client.tsx";
+import {useState} from "react";
+import {ColumnType, TaskType} from "../../shared/api";
 
 export const ColumnsRow = () => {
-    const {data, isFetching, isError} = useGetTasksQuery()
 
-    const addTaskMutation = useMutation({
-        mutationFn: tasksAPI.addTask,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todos'] })
-        },
-    })
-    const addTask = (task: TaskType) => {
-        addTaskMutation.mutate(task)
-    }
+    const {data, isFetching, isError} = useTasksQuery().getTasks
 
-
-
-    const deleteTaskMutation = useMutation({
-        mutationFn: tasksAPI.deleteTask,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todos'] })
-        },
-    })
-
-    const deleteTask = (taskId: string) => {
-        deleteTaskMutation.mutate(taskId)
-    }
-
-
-    const updateTaskMutation = useMutation({
-        mutationFn: tasksAPI.updateTask,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['todos'] })
-        },
-    })
-
-    const updateTask = (model: Partial<TaskType>) => {
-        updateTaskMutation.mutate(model)
-    }
-
-
-    const [currentColumn, setCurrentColumn] = useState<null | BoardType>(null)
+    const [currentColumn, setCurrentColumn] = useState<null | ColumnType>(null)
     const [currentTask, setCurrentTask] = useState<null | TaskType>(null)
 
     if (isError) {
@@ -59,9 +22,6 @@ export const ColumnsRow = () => {
             {data && data.map(board =>
                 <Column board={board}
                         disabled={isFetching}
-                        deleteTask={deleteTask}
-                        updateTask={updateTask}
-                        addTask={addTask}
                         key={board.id}
                         currentColumn={currentColumn}
                         currentTask={currentTask}

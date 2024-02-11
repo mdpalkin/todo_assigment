@@ -1,30 +1,22 @@
 import {Paper, Typography} from "@mui/material";
-import {Task} from "../../Task/ui";
-import s from './Column.module.scss'
+import s from './styles.module.scss'
 import {v1} from "uuid";
+import {ColumnType, TaskType} from "shared/api/models.ts";
+import {AddItemForm} from "../../../features/AddItemForm";
 import {useDragEndDrop} from "../model/useDragEndDrop.ts";
-import {BoardType, TaskType} from "shared/api/models.ts";
-import {AddItemForm} from "../../../features/AddItemForm/ui.tsx";
+import {Task, useTasksQuery} from "../../task";
 
-export const Column = ({
-                           board,
-                           deleteTask,
-                           updateTask,
-                           addTask,
-                           setCurrentColumn,
-                           setCurrentTask,
-                           currentTask,
-                           disabled,
-                           currentColumn
-                       }: Props) => {
+export const Column = ({board, disabled, currentColumn, setCurrentColumn, setCurrentTask, currentTask}: Props) => {
 
+    const {updateTask, addTask} = useTasksQuery()
 
     const {
         dragOverHandler,
         dragStartHandler,
         dropHandler,
         dropCardHandler
-    } = useDragEndDrop({setCurrentTask, setCurrentColumn, currentTask, currentColumn, updateTask})
+    } = useDragEndDrop({updateTask, setCurrentColumn, currentColumn, setCurrentTask, currentTask})
+
 
     const addTaskHandler = (title: string) => {
         const newTask = {id: v1(), title, column: board.type, order: board.items.length}
@@ -46,8 +38,6 @@ export const Column = ({
                 onDrop={e => dropHandler(e, board, item)}
                 onDragOver={(e) => dragOverHandler(e)}
                 task={item}
-                deleteTask={deleteTask}
-                updateTask={updateTask}
             >{item.title}
             </Task>
         )}
@@ -58,13 +48,10 @@ export const Column = ({
 }
 
 type Props = {
-    board: BoardType
-    deleteTask: (taskId: string) => void
-    updateTask: (model: Partial<TaskType>) => void
-    addTask: (task: TaskType) => void
-    currentColumn: BoardType | null
+    board: ColumnType
+    currentColumn: ColumnType | null
     currentTask: TaskType | null
-    setCurrentColumn: (board: BoardType) => void
+    setCurrentColumn: (board: ColumnType) => void
     setCurrentTask: (item: TaskType) => void
     disabled?: boolean
 }
