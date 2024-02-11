@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {ColumnType, tasksAPI, TaskType} from "../../../shared/api/index.js";
+import {ColumnType, tasksAPI, TaskType} from "../../../shared/api";
 import {queryClient} from "../../../app/providers/query-client.tsx";
 
 export const useTasksQuery = () => {

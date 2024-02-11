@@ -1,9 +1,9 @@
 import {IconButton, Paper} from "@mui/material";
-import {EditableSpan} from "../../../features/EditableSpan/index.js";
+import {EditableSpan} from "../../../features/EditableSpan";
 import s from './styles.module.scss'
 import DeleteIcon from "@mui/icons-material/Delete";
 import {ComponentPropsWithoutRef} from "react";
-import {TaskType} from "../../../shared/api/index.js";
+import {TaskType} from "../../../shared/api";
 import {useTasksQuery} from "../model";
 
 export const Task = ({task, ...rest}: Props) => {

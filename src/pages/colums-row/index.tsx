@@ -1,8 +1,8 @@
-import {useTasksQuery} from "../../entities/task/index.js";
+import {useTasksQuery} from "../../entities/task";
 import {useState} from "react";
-import {ColumnType, TaskType} from "../../shared/api/index.js";
+import {ColumnType, TaskType} from "../../shared/api";
 import s from './styles.module.scss'
-import {Loader} from "../../shared/ui/Loader/Loader.tsx";
+import {Loader} from "../../shared/ui/Loader";
 import {Column} from "../../entities/column/ui";
 
 export const ColumnsRow = () => {
