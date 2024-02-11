@@ -1,7 +1,7 @@
 import {DragEvent} from "react";
 import {ColumnType, TaskType} from "shared/api/models.ts";
 
-export const useTasksDnD = ({updateTask, setCurrentTask, currentTask, setCurrentColumn, currentColumn} : Props) => {
+export const useTasksDnD = ({updateTask, setCurrentTask, currentTask, setCurrentColumn, currentColumn}: Props) => {
 
     const dragOverHandler = (e: DragEvent<HTMLSpanElement>) => {
         e.preventDefault()
@@ -12,41 +12,30 @@ export const useTasksDnD = ({updateTask, setCurrentTask, currentTask, setCurrent
         setCurrentTask(item)
     }
 
-    const dropHandler = (e: DragEvent<HTMLSpanElement>, board: ColumnType, item: TaskType) => {
-            e.stopPropagation();
-            e.preventDefault();
+    const dropHandler = (e: DragEvent<HTMLSpanElement>, column: ColumnType, task: TaskType) => {
+        e.stopPropagation()
+        e.preventDefault()
 
-            const newItems = [...board.items];
-            const currentIndex = currentColumn!.items.indexOf(currentTask!);
-            const dropIndex = newItems.indexOf(item);
+        const currentIndex = currentColumn!.items.indexOf(currentTask!)
+        const dropIndex = column.items.indexOf(task)
 
-            newItems.splice(currentIndex, 1);
-            newItems.splice(dropIndex + 1, 0, currentTask!);
-
-            const updatedItems = newItems.map((task, index) => ({
-                ...task,
-                order: index,
-            }));
-
-            setCurrentColumn({
-                ...currentColumn!,
-                items: updatedItems,
-            });
-
-            updateTask({
-                id: currentTask!.id,
-                column: board.type,
-                order: dropIndex + 1,
-            });
+        if (column.type !== currentTask?.column) {
+            updateTask({id: currentTask!.id, column: column.type, order: column.items.length - 1})
+        } else {
+            updateTask({id: currentTask.id, order: (dropIndex)})
+            updateTask({id: task.id, order: (currentIndex)})
+        }
 
     }
 
     const dropCardHandler = (e: DragEvent<HTMLDivElement>, board: ColumnType) => {
         e.stopPropagation()
-        board.items.push(currentTask!)
-        const currentIndex = currentColumn!.items.indexOf(currentTask!)
-        currentColumn!.items.splice(currentIndex, 1)
-        updateTask( {id: currentTask!.id, column: board.type})
+
+        if (currentTask?.column !== board.type) {
+            updateTask({id: currentTask!.id, column: board.type, order: board.items.length})
+        }
+
+
     }
 
     return {
