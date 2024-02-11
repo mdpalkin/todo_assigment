@@ -2,7 +2,7 @@ import {memo} from "react";
 import s from './styles.module.scss'
 import {IconButton, TextField, Typography} from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {useAddItem} from "../model/useAddItem.ts";
+import {useAddItem} from "../model";
 
 export const AddItemForm = memo(({disabled = false, callback}: Props) => {
 
