@@ -1,9 +1,9 @@
-import {useTasksQuery} from "../../entities/task";
 import {useState} from "react";
 import {ColumnType, TaskType} from "../../shared/api";
 import s from './styles.module.scss'
 import {Loader} from "../../shared/ui/Loader";
 import {Column} from "../../entities/column/ui";
+import {useTasksQuery} from "../../entities/Task";
 
 export const ColumnsRow = () => {
 

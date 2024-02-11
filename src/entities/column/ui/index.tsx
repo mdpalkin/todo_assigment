@@ -4,7 +4,7 @@ import {v1} from "uuid";
 import {ColumnType, TaskType} from "shared/api/models.ts";
 import {AddItemForm} from "../../../features/AddItemForm";
 import {useTasksDnD} from "../model/useTasksDnD.ts";
-import {Task, useTasksQuery} from "../../task";
+import {Task, useTasksQuery} from "../../Task";
 
 export const Column = ({column, disabled, currentColumn, setCurrentColumn, setCurrentTask, currentTask}: Props) => {
 

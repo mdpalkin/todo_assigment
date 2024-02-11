@@ -1,4 +1,4 @@
-import {ColumnsRow} from "../views/columsRow";
+import {ColumnsRow} from "../pages/columsRow";
 import {WithProviders} from "./providers";
 
 
